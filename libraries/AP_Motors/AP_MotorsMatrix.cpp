@@ -348,6 +348,13 @@ void AP_MotorsMatrix::add_motor_raw(int8_t motor_num, float roll_fac, float pitc
     }
 }
 
+void AP_MotorsMatrix::add_motor_raw_6dof(int8_t motor_num, float roll_fac, float pitch_fac, float yaw_fac, uint8_t testing_order)
+{
+    //Parent takes care of enabling output and setting up masks
+    add_motor_raw(motor_num, roll_fac, pitch_fac, yaw_fac, testing_order);
+
+}
+
 // add_motor using just position and prop direction - assumes that for each motor, roll and pitch factors are equal
 void AP_MotorsMatrix::add_motor(int8_t motor_num, float angle_degrees, float yaw_factor, uint8_t testing_order)
 {
@@ -467,6 +474,31 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     break;
             }
             break;  // quad
+
+        case MOTOR_FRAME_HYBRID:
+            switch (frame_type) {
+                case MOTOR_FRAME_TYPE_X:
+                    //add_motor(AP_MOTORS_MOT_1,   45, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 1);
+                    //add_motor(AP_MOTORS_MOT_2, -135, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 3);
+                    //add_motor(AP_MOTORS_MOT_3,  -45, AP_MOTORS_MATRIX_YAW_FACTOR_CW,  4);
+                    //add_motor(AP_MOTORS_MOT_4,  135, AP_MOTORS_MATRIX_YAW_FACTOR_CW,  2);
+                    //add_motor(AP_MOTORS_MOT_5,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CW,  5);
+                    //add_motor(AP_MOTORS_MOT_6,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CCW,  6);
+                    //add_motor_raw(AP_MOTORS_MOT_5,  0.0f,  0.000f, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 1);
+                    //add_motor_raw(AP_MOTORS_MOT_6,  0.0f,  0.000f, AP_MOTORS_MATRIX_YAW_FACTOR_CW,  4);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_1,  0.0f,  0.5f,  0.5f, 1);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_2,  0.0f,  0.5f, -0.5f, 3);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_3,  0.0f,  0.5f, -0.5f, 4);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_4,  0.0f,  0.5f,  0.5f, 2);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_5, 0.0f,   0.0f,  0.0f, 5);
+                    add_motor_raw_6dof(AP_MOTORS_MOT_6, 0.0f,   0.0f,  0.0f, 6);
+                    success = true;
+                    break;
+                default:
+                // hybrid frame class does not support this frame type
+                    break;
+           }
+           break;
 
         case MOTOR_FRAME_HEXA:
             switch (frame_type) {
