@@ -445,6 +445,7 @@ MAV_TYPE Copter::get_frame_mav_type()
         case AP_Motors::MOTOR_FRAME_UNDEFINED:
             return MAV_TYPE_QUADROTOR;
         case AP_Motors::MOTOR_FRAME_HEXA:
+        case AP_Motors::MOTOR_FRAME_HYBRID:
         case AP_Motors::MOTOR_FRAME_Y6:
             return MAV_TYPE_HEXAROTOR;
         case AP_Motors::MOTOR_FRAME_OCTA:
